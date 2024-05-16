@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brimstone Hasta La Muerte</title>
+    <style>
+        /* Aquí puedes agregar estilos CSS si es necesario */
+    </style>
+</head>
+<body>
+    <h1>Brimstone Hasta La Muerte</h1>
+    
+    <!-- Formulario para subir imágenes -->
+    <form id="uploadForm">
+        <input type="file" id="fileInput" accept="image/*" multiple>
+        <input type="text" id="titleInput" placeholder="Título de la publicación">
+        <button type="submit">Subir Imágenes</button>
+    </form>
+    
+    <!-- Aquí se mostrarán las imágenes subidas -->
+    <div id="imageContainer"></div>
+    
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('fileInput');
+        const titleInput = document.getElementById('titleInput');
+        const imageContainer = document.getElementById('imageContainer');
+        
+        uploadForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const files = fileInput.files;
+            const title = titleInput.value;
+            if (files.length === 0) {
+                alert('Por favor selecciona al menos una imagen para subir.');
+                return;
+            }
+            if (!title.trim()) {
+                alert('Por favor ingresa un título para la publicación.');
+                return;
+            }
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const imageUrl = event.target.result;
+                    const imageElement = document.createElement('img');
+                    imageElement.src = imageUrl;
+                    imageElement.title = title;
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Eliminar';
+                    deleteButton.addEventListener('click', function() {
+                        imageContainer.removeChild(imageElement);
+                    });
+                    const div = document.createElement('div');
+                    div.appendChild(imageElement);
+                    div.appendChild(deleteButton);
+                    imageContainer.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+            uploadForm.reset();
+            titleInput.value = '';
+        });
+    </script>
+</body>
+</html>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDUEUDBZLoOj4bxpAk22clxe4GeBqfaF_Y",
+  authDomain: "brimstone-hasta-la-muerte.firebaseapp.com",
+  projectId: "brimstone-hasta-la-muerte",
+  storageBucket: "brimstone-hasta-la-muerte.appspot.com",
+  messagingSenderId: "199221581668",
+  appId: "1:199221581668:web:539615bd8868cb97b00c71",
+  measurementId: "G-Z33Y7WSLNF"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);     
